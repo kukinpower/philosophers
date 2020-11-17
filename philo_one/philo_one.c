@@ -1,5 +1,7 @@
 #include "philo_one.h"
 
+t_philo	*g_philosophers;
+
 _Bool	is_bad_input(char **av)
 {
 	int i;
@@ -20,19 +22,33 @@ _Bool	is_bad_input(char **av)
 	return (0);
 }
 
-int		main(int ac, char **av)
+void	init_philo(int ac, char **av, t_input *input)
 {
+	input->number_of_philosophers = ft_atoi(av[0]);
+	input->time_to_die = ft_atoi(av[1]);
+	input->time_to_eat = ft_atoi(av[2]);
+	input->time_to_sleep = ft_atoi(av[3]);
+	if (ac == 6)
+		input->number_of_times_each_philosopher_must_eat = ft_atoi(av[4]);
+	else
+		input->number_of_times_each_philosopher_must_eat = 0;
+}
+
+int			main(int ac, char **av)
+{
+	t_input	input;
+
 	if ((ac != 5 && ac != 6) || is_bad_input(av))
 	{
 		ft_putstr_fd("error arguments count or bad content", 2);
 		return (1);
 	}
-	int	number_of_philosophers; // also the num of forks;
-	int	time_to_die; // in milliseconds. if a philosopher doesn’t start eating ’time_to_die’ milliseconds after starting his last meal or the beginning of the simulation, it dies
-	int	time_to_eat; // in milliseconds and is the time it takes for a philosopher to eat. During that time he will need to keep the two forks.
-	int time_to_sleep; // in milliseconds and is the time the philosopher will spend sleeping
-	int	number_of_times_each_philosopher_must_eat; // is optional, if all philosophers eat at least ’number_of_times_each_philosopher_must_eat’ the simulation will stop. If not specified, the simulation will stop only at the death of a philosopher.
+	init_philo(ac, av, &input);
+	// save start time
+	// usleep. create my function to count time without calculation errors
 
+	g_philosophers = malloc(sizeof(t_philo) * (input.number_of_philosophers + 1));
+//	ft_alloc_check(g_philosophers);
 
 	// Each philosopher should be given a number from 1 to ’number_of_philosophers’.
 
@@ -40,14 +56,6 @@ int		main(int ac, char **av)
 	//Any other philosopher with number N is seated between philosopher N - 1 and
 	//philosopher N + 1
 
-	if (ac == 6)
-	{
-		number_of_times_each_philosopher_must_eat = ft_atoi(av[4]);
-	}
-	else
-	{
-		number_of_times_each_philosopher_must_eat = 0;
-	}
 }
 
 /*
