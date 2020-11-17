@@ -22,7 +22,7 @@ _Bool	is_bad_input(char **av)
 	return (0);
 }
 
-void	init_philo(int ac, char **av, t_input *input)
+void	init_input(int ac, char **av, t_input *input)
 {
 	input->number_of_philosophers = ft_atoi(av[0]);
 	input->time_to_die = ft_atoi(av[1]);
@@ -34,6 +34,27 @@ void	init_philo(int ac, char **av, t_input *input)
 		input->number_of_times_each_philosopher_must_eat = 0;
 }
 
+void		init_philo(t_input input)
+{
+	int	i;
+
+	i = 0;
+	g_philosophers = malloc(sizeof(t_philo) * (input.number_of_philosophers + 1));
+	while (i < input.number_of_philosophers)
+	{
+		g_philosophers[i].time_to_die = input.time_to_die;
+		g_philosophers[i].time_to_eat = input.time_to_eat;
+		g_philosophers[i].time_to_sleep = input.time_to_sleep;
+		g_philosophers[i].desired_meals_count = input.number_of_times_each_philosopher_must_eat;
+		g_philosophers[i].current_meals_count = 0;
+		// init mutexes
+		g_philosophers[i].is_left_taken = 0;
+		g_philosophers[i].is_right_taken = 0;
+		g_philosophers[i].is_eating = 0;
+		i++;
+	}
+}
+
 int			main(int ac, char **av)
 {
 	t_input	input;
@@ -43,11 +64,11 @@ int			main(int ac, char **av)
 		ft_putstr_fd("error arguments count or bad content", 2);
 		return (1);
 	}
-	init_philo(ac, av, &input);
+	init_input(ac, av, &input);
+	init_philo(input);
 	// save start time
 	// usleep. create my function to count time without calculation errors
 
-	g_philosophers = malloc(sizeof(t_philo) * (input.number_of_philosophers + 1));
 //	ft_alloc_check(g_philosophers);
 
 	// Each philosopher should be given a number from 1 to ’number_of_philosophers’.

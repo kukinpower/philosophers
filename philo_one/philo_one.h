@@ -18,10 +18,13 @@ typedef struct	s_philo {
 	int	time_to_eat; // in milliseconds and is the time it takes for a philosopher to eat. During that time he will need to keep the two forks.
 	int time_to_sleep; // in milliseconds and is the time the philosopher will spend sleeping
 	int	number_of_times_each_philosopher_must_eat; // is optional, if all philosophers eat at least ’number_of_times_each_philosopher_must_eat’ the simulation will stop. If not specified, the simulation will stop only at the death of a philosopher.
-	pthread_mutex_t	*left; // mutex blocks resources in another thread, if made mutax lock. needs to be unlocked in the same thread
-	pthread_mutex_t *right;
+	int	desired_meals_count;
+	int	current_meals_count;
+	pthread_mutex_t	*left_fork; // mutex blocks resources in another thread, if made mutax lock. needs to be unlocked in the same thread
+	pthread_mutex_t *right_fork;
 	_Bool is_left_taken;
 	_Bool is_right_taken;
+	_Bool is_eating;
 }				t_philo;
 
 extern	t_philo	*g_philosophers;
