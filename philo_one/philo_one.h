@@ -28,6 +28,8 @@ typedef struct	s_philo {
 }				t_philo;
 
 extern	t_philo	*g_philosophers;
+extern	pthread_mutex_t *g_forks;
+
 size_t		ft_strlen(const char *s);
 void		ft_putstr_fd(char *s, int fd);
 char		*ft_itoa(int n);
