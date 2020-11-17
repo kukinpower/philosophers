@@ -1,0 +1,4 @@
+#ifndef PHILOSOPHERS_PHILO_ONE_H
+#define PHILOSOPHERS_PHILO_ONE_H
+
+#endif
