@@ -1,10 +1,30 @@
 #include "philo_one.h"
 
+_Bool	is_bad_input(char **av)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (av[i])
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!ft_isdigit(av[i][j]))
+				return (1);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int		main(int ac, char **av)
 {
-	if (ac != 5 && != 6)
+	if ((ac != 5 && ac != 6) || is_bad_input(av))
 	{
-		ft_putstr_fd("error arguments count", 2);
+		ft_putstr_fd("error arguments count or bad content", 2);
 		return (1);
 	}
 	int	number_of_philosophers; // also the num of forks;
