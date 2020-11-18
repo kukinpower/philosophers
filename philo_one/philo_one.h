@@ -30,8 +30,9 @@ typedef struct	s_philo {
 	_Bool is_eating;
 }				t_philo;
 
-extern	t_philo	*g_philosophers;
+extern	t_philo			*g_philosophers;
 extern	pthread_mutex_t *g_forks;
+extern	pthread_t		*g_philo_threads;
 
 size_t		ft_strlen(const char *s);
 void		ft_putstr_fd(char *s, int fd);

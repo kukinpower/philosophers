@@ -1,7 +1,8 @@
 #include "philo_one.h"
 
-t_philo	*g_philosophers;
-pthread_mutex_t *g_forks;
+t_philo			*g_philosophers;
+pthread_mutex_t	*g_forks;
+pthread_t		*g_philo_threads;
 
 _Bool	is_bad_input(char **av)
 {
@@ -33,13 +34,15 @@ _Bool	init_input(int ac, char **av, t_input *input)
 		input->number_of_times_each_philosopher_must_eat = ft_atoi(av[4]);
 	else
 		input->number_of_times_each_philosopher_must_eat = 0;
-	if (!(g_philosophers = malloc(sizeof(t_philo) * (input->number_of_philosophers + 1))))
+	if (!(g_philosophers = malloc(sizeof(t_philo) * input->number_of_philosophers)))
 		return (1);
-	if (!(g_forks = malloc(sizeof(pthread_mutex_t) * (input->number_of_philosophers + 1))))
+	if (!(g_forks = malloc(sizeof(pthread_mutex_t) * input->number_of_philosophers)))
 	{
 		free(g_philosophers);
 		return (1);
 	}
+	if (!(g_philo_threads = malloc(sizeof(pthread_t) * input->number_of_philosophers))) //free
+		return (1);
 	return (0);
 }
 
@@ -76,35 +79,58 @@ void		init_forks(int number_of_forks)
 	}
 }
 
-void		*edit_thread(void *val)
+void		*eat_sleep_repeat(void *val)
 {
-	printf("thread val is: %d\n", *((int *)val));
+	t_philo *philo;
+
+	philo = (t_philo *)val;
+	pthread_mutex_lock(philo->left_fork);
+	//taken fork
+	pthread_mutex_lock(philo->right_fork);
+	//taken fork
+
+	//eat, is_eating = 1;
+	// print is_eating
+	usleep(200 * 1000);
+	//sleep
+	usleep(200 * 1000);
+	//think print
 	return (0);
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
-	(void)ac;
-	(void)av;
+//	(void)ac;
+//	(void)av;
 	pthread_t	thread;
-	int k = 550;
-	pthread_create(&thread, NULL, edit_thread, &k);
-	pthread_join(thread, NULL);
-//	t_input	input;
-//
-//	if ((ac != 5 && ac != 6) || is_bad_input(av))
-//	{
-//		ft_putstr_fd("error arguments count or bad content", 2);
-//		return (1);
-//	}
-//	if (init_input(ac, av, &input))
-//	{
-//		ft_putstr_fd("out of memory", 2);
-//		return (1);
-//	}
-//	init_philo(input);
-//	init_forks(input.number_of_philosophers);
+//	int k = 550;
+	t_input		input;
 
+	if ((ac != 5 && ac != 6) || is_bad_input(av))
+	{
+		ft_putstr_fd("error arguments count or bad content", 2);
+		return (1);
+	}
+	if (init_input(ac, av, &input))
+	{
+		ft_putstr_fd("out of memory", 2);
+		return (1);
+	}
+	init_philo(input);
+	init_forks(input.number_of_philosophers);
+
+// init threads
+	int i = 0;
+
+	while (i < input.number_of_philosophers)
+	{
+		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
+		i++;
+	}
+
+//	pthread_join(thread, NULL);
+//
+//	start_philo();
 
 
 	// save start time
