@@ -5,6 +5,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
+
+#include <stdio.h>
+
 typedef struct	s_input {
 	int	number_of_philosophers; // also the num of forks;
 	int	time_to_die; // in milliseconds. if a philosopher doesn’t start eating ’time_to_die’ milliseconds after starting his last meal or the beginning of the simulation, it dies

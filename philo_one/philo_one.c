@@ -76,22 +76,37 @@ void		init_forks(int number_of_forks)
 	}
 }
 
+void		*edit_thread(void *val)
+{
+	printf("thread val is: %d\n", *((int *)val));
+	return (0);
+}
+
 int			main(int ac, char **av)
 {
-	t_input	input;
+	(void)ac;
+	(void)av;
+	pthread_t	thread;
+	int k = 550;
+	pthread_create(&thread, NULL, edit_thread, &k);
+	pthread_join(thread, NULL);
+//	t_input	input;
+//
+//	if ((ac != 5 && ac != 6) || is_bad_input(av))
+//	{
+//		ft_putstr_fd("error arguments count or bad content", 2);
+//		return (1);
+//	}
+//	if (init_input(ac, av, &input))
+//	{
+//		ft_putstr_fd("out of memory", 2);
+//		return (1);
+//	}
+//	init_philo(input);
+//	init_forks(input.number_of_philosophers);
 
-	if ((ac != 5 && ac != 6) || is_bad_input(av))
-	{
-		ft_putstr_fd("error arguments count or bad content", 2);
-		return (1);
-	}
-	if (init_input(ac, av, &input))
-	{
-		ft_putstr_fd("out of memory", 2);
-		return (1);
-	}
-	init_philo(input);
-	init_forks(input.number_of_philosophers);
+
+
 	// save start time
 	// usleep. create my function to count time without calculation errors
 
