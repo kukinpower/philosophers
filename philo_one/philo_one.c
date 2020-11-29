@@ -54,6 +54,8 @@ void		init_philo(t_input input)
 
 	while (i < input.number_of_philosophers)
 	{
+		g_philosophers[i].num = i;
+		g_philosophers[i].is_dead = 0;
 		g_philosophers[i].time_to_die = input.time_to_die;
 		g_philosophers[i].time_to_eat = input.time_to_eat;
 		g_philosophers[i].time_to_sleep = input.time_to_sleep;
@@ -74,6 +76,7 @@ void		init_forks(int number_of_forks)
 
 	while (i < number_of_forks)
 	{
+
 		pthread_mutex_init(&g_forks[i], NULL);
 		i++;
 	}
@@ -84,17 +87,41 @@ void		*eat_sleep_repeat(void *val)
 	t_philo *philo;
 
 	philo = (t_philo *)val;
+	while (1)
+	{
+		//start time variable
+
+		// rules which fork to choose
+		 //choose forks
+//		pthread_mutex_lock(philo->left_fork);
+//		//taken fork
+//		pthread_mutex_lock(philo->right_fork);
+		//taken fork
+		// if both forks taken
+			//eat, is_eating = 1;
+		// print is_eating
+		// get off forks
+		usleep(100); // do sleep every time by 100
+		// get something of day function, and compare
+		//sleep write
+		usleep(200 * 1000);
+		//think print
+
+		// if
+		if (philo->is_dead)
+			break ;
+	}
 	pthread_mutex_lock(philo->left_fork);
 	//taken fork
 	pthread_mutex_lock(philo->right_fork);
 	//taken fork
 
-	//eat, is_eating = 1;
-	// print is_eating
-	usleep(200 * 1000);
-	//sleep
-	usleep(200 * 1000);
-	//think print
+//	//eat, is_eating = 1;
+//	// print is_eating
+//	usleep(200 * 1000);
+//	//sleep
+//	usleep(200 * 1000);
+//	//think print
 	return (0);
 }
 
@@ -102,6 +129,12 @@ int				main(int ac, char **av)
 {
 //	(void)ac;
 //	(void)av;
+	struct timeval		time;
+	gettimeofday(&time, NULL);
+	time.tv_sec // seconds epoch start
+	time.tv_usec // count remainder from seconds
+
+
 	pthread_t	thread;
 //	int k = 550;
 	t_input		input;
@@ -126,6 +159,14 @@ int				main(int ac, char **av)
 	{
 		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
 		i++;
+	}
+
+	// could be a different thread
+	while (1)
+	{
+
+		// last eat = start time
+//		if () current time - simulation start time > time death || cur time - last meal > time death
 	}
 
 //	pthread_join(thread, NULL);

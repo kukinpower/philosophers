@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 
 #include <stdio.h>
@@ -17,6 +18,7 @@ typedef struct	s_input {
 }				t_input;
 
 typedef struct	s_philo {
+	int	num; //on output + 1
 	int	time_to_die; // in milliseconds. if a philosopher doesn’t start eating ’time_to_die’ milliseconds after starting his last meal or the beginning of the simulation, it dies
 	int	time_to_eat; // in milliseconds and is the time it takes for a philosopher to eat. During that time he will need to keep the two forks.
 	int time_to_sleep; // in milliseconds and is the time the philosopher will spend sleeping
@@ -28,6 +30,7 @@ typedef struct	s_philo {
 	_Bool is_left_taken;
 	_Bool is_right_taken;
 	_Bool is_eating;
+	_Bool is_dead;
 }				t_philo;
 
 extern	t_philo			*g_philosophers;
