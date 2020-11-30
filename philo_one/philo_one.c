@@ -47,7 +47,53 @@ void		*eat_sleep_repeat(void *val)
 	return (0);
 }
 
-void			time()
+char			*get_action(int	action)
+{
+	if (action == EAT)
+		return (" is eating\n");
+	else if (action == SLEEP)
+		return (" is sleeping\n");
+	else if (action == THINK)
+		return (" is thinking\n");
+	else if (action == TAKEN_A_FORK)
+		return (" has taken a fork\n");
+	else if (action == DEATH)
+		return (" died\n");
+	return (NULL);
+}
+
+char			*create_message(int time, int philo, int action)
+{
+	char		*time_str;
+	char		*num_str;
+	char		*message;
+	char		*act;
+	size_t		i;
+
+	i = -1;
+	act = ft_strdup(get_action(action));
+	ft_alloc_check(act);
+	time_str = ft_itoa(time);
+	ft_alloc_check(time_str);
+	num_str = ft_itoa(philo);
+	ft_alloc_check(num_str);
+	if (!(message = malloc(ft_strlen(time_str) + 4 + ft_strlen(time_str) + 1 + ft_strlen(act) + 1)))
+		return (NULL);
+	ft_memcpy(message, time_str, ft_strlen(time_str));
+
+	memset(message + ft_strlen(time_str), ' ', 4);
+	i = ft_strlen(time_str) + 5;
+	ft_memcpy(message + i, num_str, ft_strlen(num_str));
+	i += ft_strlen(num_str);
+	ft_memcpy(message + i, act, ft_strlen(act) + 1);
+
+	free(act);
+	free(time_str);
+	free(num_str);
+	return (message);
+}
+
+void			get_time()
 {
 	struct timeval		time;
 
@@ -60,10 +106,7 @@ int				main(int ac, char **av)
 {
 //	(void)ac;
 //	(void)av;
-
-
-
-	pthread_t	thread;
+	pthread_t	waiter;
 //	int k = 550;
 	t_input		input;
 

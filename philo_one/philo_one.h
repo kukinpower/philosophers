@@ -5,9 +5,18 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <string.h>
 
 
 #include <stdio.h>
+
+enum {
+	EAT,
+	SLEEP,
+	THINK,
+	TAKEN_A_FORK,
+	DEATH
+};
 
 typedef struct	s_input {
 	int	number_of_philosophers; // also the num of forks;
@@ -42,10 +51,14 @@ void		ft_putstr_fd(char *s, int fd);
 char		*ft_itoa(int n);
 int			ft_atoi(const char *str);
 int			ft_isdigit(int c);
+void		*ft_memcpy(void *dst, const void *src, size_t n);
+char		*ft_strdup(const char *s1);
 
 void		init_forks(int number_of_forks);
 void		init_philo(t_input input);
 _Bool		init_input(int ac, char **av, t_input *input);
 _Bool		is_bad_input(char **av);
+
+void		ft_alloc_check(void *ptr);
 
 #endif
