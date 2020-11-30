@@ -62,30 +62,31 @@ char			*get_action(int	action)
 	return (NULL);
 }
 
-char			*create_message(int time, int philo, int action)
+char			*create_message(size_t time, int philo, int action)
 {
 	char		*time_str;
 	char		*num_str;
 	char		*message;
 	char		*act;
 	size_t		i;
+	size_t		len;
 
-	i = -1;
+	i = 0;
 	act = ft_strdup(get_action(action));
 	ft_alloc_check(act);
 	time_str = ft_itoa(time);
 	ft_alloc_check(time_str);
 	num_str = ft_itoa(philo);
 	ft_alloc_check(num_str);
-	if (!(message = malloc(ft_strlen(time_str) + 4 + ft_strlen(time_str) + 1 + ft_strlen(act) + 1)))
+	len = ft_strlen(time_str) + 2 + ft_strlen(time_str) + ft_strlen(act);
+	if (!(message = malloc(len + 1)))
 		return (NULL);
-	ft_memcpy(message, time_str, ft_strlen(time_str));
-
-	memset(message + ft_strlen(time_str), ' ', 4);
-	i = ft_strlen(time_str) + 5;
-	ft_memcpy(message + i, num_str, ft_strlen(num_str));
-	i += ft_strlen(num_str);
-	ft_memcpy(message + i, act, ft_strlen(act) + 1);
+	*message = '\0';
+	ft_strlcat(message, time_str, len);
+	ft_strlcat(message, " ", len);
+	ft_strlcat(message, num_str, len);
+	ft_strlcat(message, " ", len);
+	ft_strlcat(message, act, len);
 
 	free(act);
 	free(time_str);
@@ -93,52 +94,53 @@ char			*create_message(int time, int philo, int action)
 	return (message);
 }
 
-void			get_time()
+size_t			get_time()
 {
 	struct timeval		time;
 
 	gettimeofday(&time, NULL);
-	time.tv_sec // seconds epoch start
-	time.tv_usec // count remainder from seconds
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+//	time.tv_sec // seconds epoch start
+//	time.tv_usec // count remainder from seconds
 }
 
 int				main(int ac, char **av)
 {
-//	(void)ac;
-//	(void)av;
-	pthread_t	waiter;
-//	int k = 550;
-	t_input		input;
+	(void)ac;
+	(void)av;
+	create_message(400, 3, EAT);
+//	pthread_t	waiter;
+////	int k = 550;
+//	t_input		input;
+//
+//	if ((ac != 5 && ac != 6) || is_bad_input(av))
+//	{
+//		ft_putstr_fd("error arguments count or bad content", 2);
+//		return (1);
+//	}
+//	if (init_input(ac, av, &input))
+//	{
+//		ft_putstr_fd("out of memory", 2);
+//		return (1);
+//	}
+//	init_philo(input);
+//	init_forks(input.number_of_philosophers);
+//
+//// init threads
+//	int i = 0;
+//
+//	while (i < input.number_of_philosophers)
+//	{
+//		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
+//		i++;
+//	}
 
-	if ((ac != 5 && ac != 6) || is_bad_input(av))
-	{
-		ft_putstr_fd("error arguments count or bad content", 2);
-		return (1);
-	}
-	if (init_input(ac, av, &input))
-	{
-		ft_putstr_fd("out of memory", 2);
-		return (1);
-	}
-	init_philo(input);
-	init_forks(input.number_of_philosophers);
-
-// init threads
-	int i = 0;
-
-	while (i < input.number_of_philosophers)
-	{
-		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
-		i++;
-	}
-
-	// could be a different thread
-	while (1)
-	{
-
-		// last eat = start time
-//		if () current time - simulation start time > time death || cur time - last meal > time death
-	}
+//	while (1)
+//	{
+//
+//		// last eat = start time
+////		if () current time - simulation start time > time death || cur time - last meal > time death
+//	}
 
 //	pthread_join(thread, NULL);
 //

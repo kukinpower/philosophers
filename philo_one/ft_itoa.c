@@ -12,9 +12,9 @@
 
 #include "philo_one.h"
 
-static int		ft_intlen_with_minus(int num)
+static int		ft_intlen_with_minus(size_t num)
 {
-	int		numlen;
+	size_t		numlen;
 
 	numlen = 0;
 	if (num == 0)
@@ -34,25 +34,20 @@ static int		ft_intlen_with_minus(int num)
 	return (numlen);
 }
 
-char			*ft_itoa(int n)
+char			*ft_itoa(size_t num)
 {
 	int		nlen;
 	char	*s;
-	long	num;
 
 	nlen = 0;
-	num = (long)n;
-	nlen = ft_intlen_with_minus(n);
+	nlen = ft_intlen_with_minus(num);
 	if (!(s = malloc(nlen + 1)))
 		return (NULL);
 	s[nlen] = '\0';
 	if (num == 0)
 		s[0] = '0';
 	if (num < 0)
-	{
-		s[0] = '-';
-		num = -num;
-	}
+		return (NULL);
 	nlen--;
 	while (nlen >= 0 && num != 0)
 	{

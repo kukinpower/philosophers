@@ -18,12 +18,8 @@ file(GLOB
 
 file(GLOB
         PHILO_THREE "philo_three/*.c")
-#
-#file(GLOB
-#        LIBFT "libft/*.c")
 
 add_executable(philo
-#        ${LIBFT}
         ${PHILO_ONE}
         ${PHILO_TWO}
         ${PHILO_THREE}

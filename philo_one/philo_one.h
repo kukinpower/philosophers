@@ -48,11 +48,12 @@ extern	pthread_t		*g_philo_threads;
 
 size_t		ft_strlen(const char *s);
 void		ft_putstr_fd(char *s, int fd);
-char		*ft_itoa(int n);
+char		*ft_itoa(size_t num);
 int			ft_atoi(const char *str);
 int			ft_isdigit(int c);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 char		*ft_strdup(const char *s1);
+size_t		ft_strlcat(char *dst, const char *src, size_t dstsize);
 
 void		init_forks(int number_of_forks);
 void		init_philo(t_input input);
