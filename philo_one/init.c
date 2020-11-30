@@ -51,6 +51,22 @@ _Bool	init_input(int ac, char **av, t_input *input)
 	return (0);
 }
 
+int		assign_left_fork(int i, int num)
+{
+	int		j;
+
+	j = i == 0 ? num - 1 : i - 1;
+	return (j);
+}
+
+int		assign_right_fork(int i, int num)
+{
+	int		j;
+
+	j = i == 0 ? 0 : i;
+	return (j);
+}
+
 void		init_philo(t_input input)
 {
 	int	i;
@@ -69,6 +85,8 @@ void		init_philo(t_input input)
 		g_philosophers[i].is_left_taken = 0;
 		g_philosophers[i].is_right_taken = 0;
 		g_philosophers[i].is_eating = 0;
+		g_philosophers[i].left_fork = &g_forks[assign_left_fork(i, input.number_of_philosophers)];
+		g_philosophers[i].right_fork = &g_forks[assign_right_fork(i, input.number_of_philosophers)];
 		i++;
 	}
 }
@@ -81,7 +99,6 @@ void		init_forks(int number_of_forks)
 
 	while (i < number_of_forks)
 	{
-
 		pthread_mutex_init(&g_forks[i], NULL);
 		i++;
 	}
