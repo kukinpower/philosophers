@@ -59,7 +59,7 @@ int		assign_left_fork(int i, int num)
 	return (j);
 }
 
-int		assign_right_fork(int i, int num)
+int		assign_right_fork(int i)
 {
 	int		j;
 
@@ -86,7 +86,7 @@ void		init_philo(t_input input)
 		g_philosophers[i].is_right_taken = 0;
 		g_philosophers[i].is_eating = 0;
 		g_philosophers[i].left_fork = &g_forks[assign_left_fork(i, input.number_of_philosophers)];
-		g_philosophers[i].right_fork = &g_forks[assign_right_fork(i, input.number_of_philosophers)];
+		g_philosophers[i].right_fork = &g_forks[assign_right_fork(i)];
 		i++;
 	}
 }
