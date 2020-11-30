@@ -3,6 +3,28 @@
 t_philo			*g_philosophers;
 pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
+size_t			start_time;
+
+void		count_time(size_t time, size_t desired_time)
+{
+	while (get_time() - time < desired_time)
+		usleep(100);
+}
+
+void		eat(size_t eating_time, t_philo *philo)
+{
+	print_message(eating_time - start_time, philo->num, EAT);
+	count_time(eating_time, philo->time_to_eat);
+	philo->last_meal_time = get_time();
+	philo->current_meal++;
+}
+
+void		sleep_philo(size_t sleeping_time, t_philo *philo)
+{
+	print_message(sleeping_time - start_time, philo->num, SLEEP);
+	count_time(sleeping_time, philo->time_to_eat);
+}
+
 
 void		*eat_sleep_repeat(void *val)
 {
@@ -11,129 +33,50 @@ void		*eat_sleep_repeat(void *val)
 	philo = (t_philo *)val;
 	while (1)
 	{
-		//start time variable
-
-		// rules which fork to choose
-		 //choose forks
-//		pthread_mutex_lock(philo->left_fork);
-//		//taken fork
-//		pthread_mutex_lock(philo->right_fork);
-		//taken fork
-		// if both forks taken
-			//eat, is_eating = 1;
-		// print is_eating
-		// get off forks
-		usleep(100); // do sleep every time by 100
-		// get something of day function, and compare
-		//sleep write
-		usleep(200 * 1000);
-		//think print
-
-		// if
-		if (philo->is_dead)
-			break ;
+		get_forks(philo);
+		eat(get_time(), philo);
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		sleep_philo(get_time(), philo);
+		print_message(get_time() - start_time, philo->num, THINK);
 	}
-	pthread_mutex_lock(philo->left_fork);
-	//taken fork
-	pthread_mutex_lock(philo->right_fork);
-	//taken fork
-
-//	//eat, is_eating = 1;
-//	// print is_eating
-//	usleep(200 * 1000);
-//	//sleep
-//	usleep(200 * 1000);
-//	//think print
 	return (0);
 }
 
-char			*get_action(int	action)
-{
-	if (action == EAT)
-		return (" is eating\n");
-	else if (action == SLEEP)
-		return (" is sleeping\n");
-	else if (action == THINK)
-		return (" is thinking\n");
-	else if (action == TAKEN_A_FORK)
-		return (" has taken a fork\n");
-	else if (action == DEATH)
-		return (" died\n");
-	return (NULL);
-}
-
-char			*create_message(size_t time, int philo, int action)
-{
-	char		*time_str;
-	char		*num_str;
-	char		*message;
-	char		*act;
-	size_t		i;
-	size_t		len;
-
-	i = 0;
-	act = ft_strdup(get_action(action));
-	ft_alloc_check(act);
-	time_str = ft_itoa(time);
-	ft_alloc_check(time_str);
-	num_str = ft_itoa(philo);
-	ft_alloc_check(num_str);
-	len = ft_strlen(time_str) + 2 + ft_strlen(time_str) + ft_strlen(act);
-	if (!(message = malloc(len + 1)))
-		return (NULL);
-	*message = '\0';
-	ft_strlcat(message, time_str, len);
-	ft_strlcat(message, " ", len);
-	ft_strlcat(message, num_str, len);
-	ft_strlcat(message, " ", len);
-	ft_strlcat(message, act, len);
-
-	free(act);
-	free(time_str);
-	free(num_str);
-	return (message);
-}
-
-size_t			get_time()
-{
-	struct timeval		time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-//	time.tv_sec // seconds epoch start
-//	time.tv_usec // count remainder from seconds
-}
+//void			monitor(t_input input)
+//{
+//
+//}
 
 int				main(int ac, char **av)
 {
-	(void)ac;
-	(void)av;
-	create_message(400, 3, EAT);
-//	pthread_t	waiter;
-////	int k = 550;
-//	t_input		input;
-//
-//	if ((ac != 5 && ac != 6) || is_bad_input(av))
-//	{
-//		ft_putstr_fd("error arguments count or bad content", 2);
-//		return (1);
-//	}
-//	if (init_input(ac, av, &input))
-//	{
-//		ft_putstr_fd("out of memory", 2);
-//		return (1);
-//	}
-//	init_philo(input);
-//	init_forks(input.number_of_philosophers);
-//
-//// init threads
-//	int i = 0;
-//
-//	while (i < input.number_of_philosophers)
-//	{
-//		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
-//		i++;
-//	}
+//	(void)ac;
+//	(void)av;
+	t_input		input;
+	int			i;
+
+	if ((ac != 5 && ac != 6) || is_bad_input(av))
+	{
+		ft_putstr_fd("error arguments count or bad content", 2);
+		return (1);
+	}
+	if (init_input(ac, av, &input))
+	{
+		ft_putstr_fd("out of memory", 2);
+		return (1);
+	}
+	init_philo(input);
+	init_forks(input.number_of_philosophers);
+
+	i = 0;
+	start_time = get_time();
+	while (i < input.number_of_philosophers)
+	{
+		g_philosophers[i].last_meal_time = start_time;
+		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
+		i++;
+	}
+//	monitor(input);
 
 //	while (1)
 //	{
