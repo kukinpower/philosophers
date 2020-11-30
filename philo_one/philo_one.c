@@ -48,6 +48,20 @@ void		*eat_sleep_repeat(void *val)
 //
 //}
 
+int				someone_died(t_input input)
+{
+	int			i;
+
+	i = 0;
+	while (i < input.number_of_philosophers)
+	{
+		if (g_philosophers[i].is_dead)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int				main(int ac, char **av)
 {
 //	(void)ac;
@@ -78,12 +92,11 @@ int				main(int ac, char **av)
 	}
 //	monitor(input);
 
-//	while (1)
-//	{
-//
-//		// last eat = start time
-////		if () current time - simulation start time > time death || cur time - last meal > time death
-//	}
+	while (1)
+	{
+		if (someone_died(input))
+			break ;
+	}
 
 //	pthread_join(thread, NULL);
 //
