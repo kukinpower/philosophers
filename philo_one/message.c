@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:11:48 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 00:55:55 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/01 00:58:05 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ void					print_message(size_t time, int philo, int action)
 {
 	char	*msg;
 
-	msg
+	msg = create_message(time, philo, action);
+	ft_putstr_fd(msg, 1);
 }
