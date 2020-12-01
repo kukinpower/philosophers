@@ -1,0 +1,37 @@
+NAME = philo_one
+SRC = eat_sleep_repeat.c \
+		errors.c \
+		ft_atoi.c \
+		ft_isdigit.c \
+		ft_itoa.c \
+		ft_putstr_fd.c \
+		ft_strdup.c \
+		ft_strlcat.c \
+		ft_strlen.c \
+		get_forks.c \
+		get_time.c \
+		init.c \
+		message.c \
+		parse.c \
+		philo_one.c
+
+OBJ = $(SRC:.c=.o)
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+LIB = -lpthread
+RM = rm -rf
+
+all: $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+
+clean:
+	/bin/rm -f $(OBJ)
+
+fclean: clean
+	/bin/rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
