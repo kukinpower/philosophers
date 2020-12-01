@@ -29,7 +29,7 @@ _Bool	init_input(int ac, char **av, t_input *input)
 	input->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
 	{
-		input->desired_meals = ft_atoi(av[4]);
+		input->desired_meals = ft_atoi(av[5]);
 		meals = input->desired_meals;
 	}
 	else
@@ -88,6 +88,7 @@ void		init_philo(t_input input)
 		g_philosophers[i].is_left_taken = 0;
 		g_philosophers[i].is_right_taken = 0;
 		g_philosophers[i].is_eating = 0;
+		g_philosophers[i].is_hungry = 1;
 		g_philosophers[i].left_fork = &g_forks[assign_left_fork(i, input.number_of_philosophers)];
 		g_philosophers[i].right_fork = &g_forks[assign_right_fork(i)];
 		i++;

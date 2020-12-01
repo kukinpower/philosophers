@@ -4,7 +4,7 @@ t_philo			*g_philosophers;
 pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
 size_t			start_time;
-size_t			meals;
+int				meals;
 
 void		count_time(size_t time, size_t desired_time)
 {
@@ -18,8 +18,6 @@ void		eat(size_t eating_time, t_philo *philo)
 	count_time(eating_time, philo->time_to_eat);
 	philo->last_meal_time = get_time();
 	philo->current_meal++;
-	if (philo->current_meal == philo->desired_meals)
-		meals++;
 }
 
 void		sleep_philo(size_t sleeping_time, t_philo *philo)
@@ -39,6 +37,12 @@ void		*eat_sleep_repeat(void *val)
 		eat(get_time(), philo);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		if (philo->desired_meals && philo->current_meal == philo->desired_meals)
+		{
+			meals++;
+			philo->is_hungry = 0;
+			break ;
+		}
 		sleep_philo(get_time(), philo);
 		print_message(get_time() - start_time, philo->num, THINK);
 	}
@@ -49,26 +53,36 @@ _Bool			monitor(t_input input)
 {
 	int i;
 
-	i = 0;
 	while (1)
 	{
+		i = 0;
 		while (i < input.number_of_philosophers)
 		{
-			if (get_time() - g_philosophers[i].last_meal_time > g_philosophers[i].time_to_die)
+			if (g_philosophers[i].is_hungry && get_time() - g_philosophers[i].last_meal_time > g_philosophers[i].time_to_die)
 			{
 				print_message(get_time() - start_time, i, DEATH);
 				return (1);
 			}
-		if (meals && meals == input.desired_meals)
-			return (1);
-		i++;
+			if (meals && meals == input.number_of_philosophers)
+			{
+				return (1);
+			}
+			i++;
 		}
 	}
 	return (0);
 }
 
-void			free_all_mem()
+void			free_all_mem(int size)
 {
+	int			i;
+
+	i = 0;
+	while (i < size)
+	{
+		pthread_detach(g_philo_threads[i]);
+		i++;
+	}
 	free(g_philosophers);
 	free(g_forks);
 	free(g_philo_threads);
@@ -76,14 +90,6 @@ void			free_all_mem()
 
 int				main(int ac, char **av)
 {
-//	(void)ac;
-//	(void)av;
-//
-//	start_time = get_time();
-//	print_message(get_time() - start_time, 1, TAKEN_A_FORK);
-//	print_message(get_time() - start_time, 1, TAKEN_A_FORK);
-
-
 	t_input		input;
 	int			i;
 
@@ -106,24 +112,12 @@ int				main(int ac, char **av)
 	while (i < input.number_of_philosophers)
 	{
 		g_philosophers[i].last_meal_time = start_time;
-		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
+		if (pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i])))
+			error_fatal();
 		i++;
 	}
 	if (monitor(input))
-	{
-		free_all_mem();
-	}
+		free_all_mem(input.number_of_philosophers);
 	return (0);
 
 }
-
-/*
-• Any change of status of a philosopher must be written as follows (with X replaced
-with the philosopher number and timestamp_in_ms the current timestamp in milliseconds)
-◦ timestamp_in_ms X has taken a fork
-◦ timestamp_in_ms X is eating
-◦ timestamp_in_ms X is sleeping
-◦ timestamp_in_ms X is thinking
-◦ timestamp_in_ms X died
-• You can’t have more than 10 ms between the death of a philosopher and when it will print its death.
- */
