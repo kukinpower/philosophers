@@ -1,14 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_one.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/01 19:27:01 by mkristie          #+#    #+#             */
+/*   Updated: 2020/12/01 19:27:02 by mkristie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_PHILO_ONE_H
-#define PHILOSOPHERS_PHILO_ONE_H
+# define PHILOSOPHERS_PHILO_ONE_H
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <string.h>
-
-
-#include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <string.h>
 
 enum {
 	EAT,
@@ -36,16 +45,16 @@ typedef struct			s_philo {
 	size_t				desired_meals;
 	size_t				current_meal;
 	pthread_mutex_t		*left_fork;
-	pthread_mutex_t 	*right_fork;
+	pthread_mutex_t		*right_fork;
 	_Bool				is_hungry;
 	size_t				last_meal_time;
 }						t_philo;
 
-extern	t_philo			*g_philosophers;
+extern	t_philo			*g_philos;
 extern	pthread_mutex_t	*g_forks;
 extern	pthread_t		*g_philo_threads;
-extern	size_t			start_time;
-extern	int				full_philos;
+extern	size_t			g_start_time;
+extern	int				g_full_philos;
 
 size_t					ft_strlen(const char *s);
 void					ft_putstr_fd(char *s, int fd);
@@ -55,7 +64,7 @@ int						ft_isdigit(int c);
 char					*ft_strdup(const char *s1);
 size_t					ft_strlcat(char *dst, const char *src, size_t dstsize);
 void					ft_alloc_check(void *ptr);
-void					error_fatal();
+void					error_fatal(void);
 void					init_forks(int number_of_forks);
 void					init_philo(t_input input);
 _Bool					init_input(t_input input);
@@ -65,5 +74,6 @@ char					*get_action(int	action);
 char					*create_message(size_t time, int philo, int action);
 void					print_message(size_t time, int philo, int action);
 void					get_forks(t_philo *philo);
+void					*eat_sleep_repeat(void *val);
 
 #endif

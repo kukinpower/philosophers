@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/01 19:21:11 by mkristie          #+#    #+#             */
+/*   Updated: 2020/12/01 19:21:12 by mkristie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
 _Bool	is_bad_input(char **av)
@@ -29,7 +41,7 @@ _Bool	parse_args(int ac, char **av, t_input *input)
 	if (ac == 6)
 	{
 		input->desired_meals = ft_atoi(av[5]);
-		full_philos = input->desired_meals;
+		g_full_philos = input->desired_meals;
 	}
 	else
 		input->desired_meals = 0;

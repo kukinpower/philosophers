@@ -26,7 +26,7 @@ static void	get_fork(t_philo *philo, int fork)
 		pthread_mutex_lock(philo->right_fork);
 	else
 		pthread_mutex_lock(philo->left_fork);
-	print_message(get_time() - start_time, philo->num, TAKEN_A_FORK);
+	print_message(get_time() - g_start_time, philo->num, TAKEN_A_FORK);
 }
 
 void		get_forks(t_philo *philo)

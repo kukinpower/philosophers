@@ -55,9 +55,9 @@ char			*create_message(size_t time, int philo, int action)
 	return (message);
 }
 
-void					print_message(size_t time, int philo, int action)
+void			print_message(size_t time, int philo, int action)
 {
-	char	*msg;
+	char		*msg;
 
 	msg = create_message(time, philo, action);
 	ft_putstr_fd(msg, 1);

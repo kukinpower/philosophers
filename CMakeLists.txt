@@ -5,7 +5,6 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories(philo_one)
 include_directories(philo_two)
-#include_directories(libft)
 include_directories(philo_three)
 
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")

@@ -1,53 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_one.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/01 19:21:14 by mkristie          #+#    #+#             */
+/*   Updated: 2020/12/01 19:21:15 by mkristie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_one.h"
 
-t_philo			*g_philosophers;
+t_philo			*g_philos;
 pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
-size_t			start_time;
-int				full_philos;
-
-void		count_time(size_t time, size_t desired_time)
-{
-	while (get_time() - time < desired_time)
-		usleep(100);
-}
-
-void		eat(size_t eating_time, t_philo *philo)
-{
-	print_message(eating_time - start_time, philo->num, EAT);
-	count_time(eating_time, philo->time_to_eat);
-	philo->last_meal_time = get_time();
-	philo->current_meal++;
-}
-
-void		sleep_philo(size_t sleeping_time, t_philo *philo)
-{
-	print_message(sleeping_time - start_time, philo->num, SLEEP);
-	count_time(sleeping_time, philo->time_to_sleep);
-}
-
-void		*eat_sleep_repeat(void *val)
-{
-	t_philo *philo;
-
-	philo = (t_philo *)val;
-	while (1)
-	{
-		get_forks(philo);
-		eat(get_time(), philo);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		if (philo->desired_meals && philo->current_meal == philo->desired_meals)
-		{
-			full_philos++;
-			philo->is_hungry = 0;
-			break ;
-		}
-		sleep_philo(get_time(), philo);
-		print_message(get_time() - start_time, philo->num, THINK);
-	}
-	return (0);
-}
+size_t			g_start_time;
+int				g_full_philos;
 
 _Bool			monitor(t_input input)
 {
@@ -58,12 +27,13 @@ _Bool			monitor(t_input input)
 		i = 0;
 		while (i < input.n_philos)
 		{
-			if (g_philosophers[i].is_hungry && get_time() - g_philosophers[i].last_meal_time > g_philosophers[i].time_to_die)
+			if (g_philos[i].is_hungry && \
+			get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
 			{
-				print_message(get_time() - start_time, i, DEATH);
+				print_message(get_time() - g_start_time, i, DEATH);
 				return (1);
 			}
-			if (full_philos && full_philos == input.n_philos)
+			if (g_full_philos && g_full_philos == input.n_philos)
 			{
 				return (1);
 			}
@@ -83,7 +53,7 @@ void			free_all_mem(int size)
 		pthread_detach(g_philo_threads[i]);
 		i++;
 	}
-	free(g_philosophers);
+	free(g_philos);
 	free(g_forks);
 	free(g_philo_threads);
 }
@@ -98,18 +68,17 @@ int				main(int ac, char **av)
 	init_philo(input);
 	init_forks(input.n_philos);
 	i = 0;
-	full_philos = 0;
-	start_time = get_time();
+	g_full_philos = 0;
+	g_start_time = get_time();
 	while (i < input.n_philos)
 	{
-		g_philosophers[i].last_meal_time = start_time;
+		g_philos[i].last_meal_time = g_start_time;
 		if (pthread_create(&g_philo_threads[i], NULL, \
-							eat_sleep_repeat, (void *)(&g_philosophers[i])))
+							eat_sleep_repeat, (void *)(&g_philos[i])))
 			error_fatal();
 		i++;
 	}
 	if (monitor(input))
 		free_all_mem(input.n_philos);
-
 	return (0);
 }
