@@ -49,6 +49,7 @@ extern	t_philo			*g_philosophers;
 extern	pthread_mutex_t	*g_forks;
 extern	pthread_t		*g_philo_threads;
 extern	size_t			start_time;
+extern	size_t			meals;
 
 size_t					ft_strlen(const char *s);
 void					ft_putstr_fd(char *s, int fd);

@@ -32,7 +32,7 @@ static void	get_fork(t_philo *philo, int fork)
 		pthread_mutex_lock(philo->left_fork);
 		philo->is_left_taken = 1;
 	}
-	print_message(get_time() - start_time, philo->num + 1, TAKEN_A_FORK);
+	print_message(get_time() - start_time, philo->num, TAKEN_A_FORK);
 }
 
 void		get_forks(t_philo *philo)

@@ -4,6 +4,7 @@ t_philo			*g_philosophers;
 pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
 size_t			start_time;
+size_t			meals;
 
 void		count_time(size_t time, size_t desired_time)
 {
@@ -17,6 +18,8 @@ void		eat(size_t eating_time, t_philo *philo)
 	count_time(eating_time, philo->time_to_eat);
 	philo->last_meal_time = get_time();
 	philo->current_meal++;
+	if (philo->current_meal == philo->desired_meals)
+		meals++;
 }
 
 void		sleep_philo(size_t sleeping_time, t_philo *philo)
@@ -24,7 +27,6 @@ void		sleep_philo(size_t sleeping_time, t_philo *philo)
 	print_message(sleeping_time - start_time, philo->num, SLEEP);
 	count_time(sleeping_time, philo->time_to_eat);
 }
-
 
 void		*eat_sleep_repeat(void *val)
 {
@@ -43,29 +45,45 @@ void		*eat_sleep_repeat(void *val)
 	return (0);
 }
 
-//void			monitor(t_input input)
-//{
-//
-//}
-
-int				someone_died(t_input input)
+_Bool			monitor(t_input input)
 {
-	int			i;
+	int i;
 
 	i = 0;
-	while (i < input.number_of_philosophers)
+	while (1)
 	{
-		if (g_philosophers[i].is_dead)
+		while (i < input.number_of_philosophers)
+		{
+			if (get_time() - g_philosophers[i].last_meal_time > g_philosophers[i].time_to_die)
+			{
+				print_message(get_time() - start_time, i, DEATH);
+				return (1);
+			}
+		if (meals && meals == input.desired_meals)
 			return (1);
 		i++;
+		}
 	}
 	return (0);
+}
+
+void			free_all_mem()
+{
+	free(g_philosophers);
+	free(g_forks);
+	free(g_philo_threads);
 }
 
 int				main(int ac, char **av)
 {
 //	(void)ac;
 //	(void)av;
+//
+//	start_time = get_time();
+//	print_message(get_time() - start_time, 1, TAKEN_A_FORK);
+//	print_message(get_time() - start_time, 1, TAKEN_A_FORK);
+
+
 	t_input		input;
 	int			i;
 
@@ -83,6 +101,7 @@ int				main(int ac, char **av)
 	init_forks(input.number_of_philosophers);
 
 	i = 0;
+	meals = 0;
 	start_time = get_time();
 	while (i < input.number_of_philosophers)
 	{
@@ -90,30 +109,12 @@ int				main(int ac, char **av)
 		pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i]));
 		i++;
 	}
-//	monitor(input);
-
-	while (1)
+	if (monitor(input))
 	{
-		if (someone_died(input))
-			break ;
+		free_all_mem();
 	}
-
-//	pthread_join(thread, NULL);
-//
-//	start_philo();
-
-
-	// save start time
-	// usleep. create my function to count time without calculation errors
-
-//	ft_alloc_check(g_philosophers);
-
-	// Each philosopher should be given a number from 1 to ’number_of_philosophers’.
-
-	// Philosopher number 1 is next to philosopher number ’number_of_philosophers’.
-	//Any other philosopher with number N is seated between philosopher N - 1 and
-	//philosopher N + 1
 	return (0);
+
 }
 
 /*

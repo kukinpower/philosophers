@@ -39,7 +39,7 @@ char			*create_message(size_t time, int philo, int action)
 	ft_alloc_check(act);
 	time_str = ft_itoa(time);
 	ft_alloc_check(time_str);
-	num_str = ft_itoa(philo);
+	num_str = ft_itoa(philo + 1);
 	ft_alloc_check(num_str);
 	len = ft_strlen(time_str) + 2 + ft_strlen(time_str) + ft_strlen(act);
 	if (!(message = malloc(len + 1)))
@@ -48,7 +48,6 @@ char			*create_message(size_t time, int philo, int action)
 	ft_strlcat(message, time_str, len);
 	ft_strlcat(message, " ", len);
 	ft_strlcat(message, num_str, len);
-	ft_strlcat(message, " ", len);
 	ft_strlcat(message, act, len);
 	free(act);
 	free(time_str);
@@ -62,4 +61,5 @@ void					print_message(size_t time, int philo, int action)
 
 	msg = create_message(time, philo, action);
 	ft_putstr_fd(msg, 1);
+	free(msg);
 }

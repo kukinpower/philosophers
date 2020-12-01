@@ -28,7 +28,10 @@ _Bool	init_input(int ac, char **av, t_input *input)
 	input->time_to_eat = ft_atoi(av[3]);
 	input->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
+	{
 		input->desired_meals = ft_atoi(av[4]);
+		meals = input->desired_meals;
+	}
 	else
 		input->desired_meals = 0;
 	if (input->number_of_philosophers < 2 || input->time_to_die <= 0 || \
