@@ -50,7 +50,8 @@ void			free_all_mem(int size)
 	i = 0;
 	while (i < size)
 	{
-		pthread_detach(g_philo_threads[i]);
+		if (pthread_detach(g_philo_threads[i]))
+			error_fatal();
 		i++;
 	}
 	free(g_philos);
