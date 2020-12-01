@@ -4,7 +4,7 @@ t_philo			*g_philosophers;
 pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
 size_t			start_time;
-int				meals;
+int				full_philos;
 
 void		count_time(size_t time, size_t desired_time)
 {
@@ -23,7 +23,7 @@ void		eat(size_t eating_time, t_philo *philo)
 void		sleep_philo(size_t sleeping_time, t_philo *philo)
 {
 	print_message(sleeping_time - start_time, philo->num, SLEEP);
-	count_time(sleeping_time, philo->time_to_eat);
+	count_time(sleeping_time, philo->time_to_sleep);
 }
 
 void		*eat_sleep_repeat(void *val)
@@ -39,7 +39,7 @@ void		*eat_sleep_repeat(void *val)
 		pthread_mutex_unlock(philo->right_fork);
 		if (philo->desired_meals && philo->current_meal == philo->desired_meals)
 		{
-			meals++;
+			full_philos++;
 			philo->is_hungry = 0;
 			break ;
 		}
@@ -56,14 +56,14 @@ _Bool			monitor(t_input input)
 	while (1)
 	{
 		i = 0;
-		while (i < input.number_of_philosophers)
+		while (i < input.n_philos)
 		{
 			if (g_philosophers[i].is_hungry && get_time() - g_philosophers[i].last_meal_time > g_philosophers[i].time_to_die)
 			{
 				print_message(get_time() - start_time, i, DEATH);
 				return (1);
 			}
-			if (meals && meals == input.number_of_philosophers)
+			if (full_philos && full_philos == input.n_philos)
 			{
 				return (1);
 			}
@@ -93,31 +93,23 @@ int				main(int ac, char **av)
 	t_input		input;
 	int			i;
 
-	if ((ac != 5 && ac != 6) || is_bad_input(av))
-	{
-		ft_putstr_fd("error arguments count or bad content", 2);
+	if (parse(ac, av, &input))
 		return (1);
-	}
-	if (init_input(ac, av, &input))
-	{
-		ft_putstr_fd("out of memory", 2);
-		return (1);
-	}
 	init_philo(input);
-	init_forks(input.number_of_philosophers);
-
+	init_forks(input.n_philos);
 	i = 0;
-	meals = 0;
+	full_philos = 0;
 	start_time = get_time();
-	while (i < input.number_of_philosophers)
+	while (i < input.n_philos)
 	{
 		g_philosophers[i].last_meal_time = start_time;
-		if (pthread_create(&g_philo_threads[i], NULL, eat_sleep_repeat, (void *)(&g_philosophers[i])))
+		if (pthread_create(&g_philo_threads[i], NULL, \
+							eat_sleep_repeat, (void *)(&g_philosophers[i])))
 			error_fatal();
 		i++;
 	}
 	if (monitor(input))
-		free_all_mem(input.number_of_philosophers);
-	return (0);
+		free_all_mem(input.n_philos);
 
+	return (0);
 }

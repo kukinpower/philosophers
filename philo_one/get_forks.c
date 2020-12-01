@@ -23,15 +23,9 @@ static int	choose_a_fork(t_philo *philo)
 static void	get_fork(t_philo *philo, int fork)
 {
 	if (fork == RIGHT)
-	{
 		pthread_mutex_lock(philo->right_fork);
-		philo->is_right_taken = 1;
-	}
 	else
-	{
 		pthread_mutex_lock(philo->left_fork);
-		philo->is_left_taken = 1;
-	}
 	print_message(get_time() - start_time, philo->num, TAKEN_A_FORK);
 }
 
