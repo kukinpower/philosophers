@@ -17,9 +17,7 @@ SRC = eat_sleep_repeat.c \
 
 OBJ = $(SRC:.c=.o)
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-LIB = -lpthread
-RM = rm -rf
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

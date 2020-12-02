@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:27:01 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 19:27:02 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/02 02:16:01 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ enum {
 	SLEEP,
 	THINK,
 	TAKEN_A_FORK,
-	DEATH,
-	RIGHT,
-	LEFT
+	DEATH
 };
 
 typedef struct			s_input {
@@ -45,7 +43,6 @@ typedef struct			s_philo {
 	size_t				time_to_sleep;
 	size_t				desired_meals;
 	size_t				current_meal;
-
 	_Bool				is_hungry;
 	size_t				last_meal_time;
 }						t_philo;
