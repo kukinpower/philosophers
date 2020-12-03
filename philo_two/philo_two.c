@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.c                                        :+:      :+:    :+:   */
+/*   philo_two.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:14 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 19:21:15 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:26:24 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 t_philo			*g_philos;
 sem_t			*g_forks;
+sem_t			*g_message;
 pthread_t		*g_philo_threads;
 size_t			g_start_time;
 int				g_full_philos;
+int				g_error;
 
 _Bool			monitor(t_input input)
 {
@@ -34,29 +36,43 @@ _Bool			monitor(t_input input)
 				return (1);
 			}
 			if (g_full_philos && g_full_philos == input.n_philos)
-			{
 				return (1);
-			}
 			i++;
+		}
+		if (g_error == FATAL_ERR)
+		{
+			ft_putstr_fd("error: fatal\n", 2);
+			return (1);
 		}
 	}
 	return (0);
 }
 
-void			free_all_mem(int size)
+_Bool			free_all_mem(int size)
 {
 	int			i;
 
 	i = 0;
 	while (i < size)
 	{
-		pthread_detach(g_philo_threads[i]);
+		if (pthread_detach(g_philo_threads[i]))
+		{
+			g_error = FATAL_ERR;
+			break ;
+		}
 		i++;
 	}
-	free(g_philos);
-	free(g_philo_threads);
-	if (sem_close(g_forks) == -1)
-		error_fatal();
+	if (g_philos)
+		free(g_philos);
+	if (g_philo_threads)
+		free(g_philo_threads);
+	if (sem_unlink("/g_forks") == -1 || sem_close(g_forks) == -1)
+		g_error = FATAL_ERR;
+	if (sem_unlink("/g_message") == -1 || sem_close(g_message) == -1)
+		g_error = FATAL_ERR;
+	if (g_error)
+		return (1);
+	return (0);
 }
 
 int				main(int ac, char **av)
@@ -71,16 +87,15 @@ int				main(int ac, char **av)
 	i = 0;
 	g_full_philos = 0;
 	g_start_time = get_time();
-
 	while (i < input.n_philos)
 	{
 		g_philos[i].last_meal_time = g_start_time;
-		if (pthread_create(&g_philo_threads[i], NULL, \
-							eat_sleep_repeat, (void *)(&g_philos[i])))
-			error_fatal();
+		pthread_create(&g_philo_threads[i], NULL, \
+							eat_sleep_repeat, (void *)(&g_philos[i]));
 		i++;
 	}
 	if (monitor(input))
-		free_all_mem(input.n_philos);
+		if (free_all_mem(input.n_philos))
+			return (1);
 	return (0);
 }

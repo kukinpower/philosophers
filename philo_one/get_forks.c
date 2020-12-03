@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 00:21:56 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 00:21:57 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:10:04 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	get_fork(t_philo *philo, int fork)
 		pthread_mutex_lock(philo->right_fork);
 	else
 		pthread_mutex_lock(philo->left_fork);
-	print_message(get_time() - g_start_time, philo->num, TAKEN_A_FORK);
+	print_message(get_time() - g_start_time, philo->num, TAKEN_A_FORK, philo->message_mutex);
 }
 
 void		get_forks(t_philo *philo)

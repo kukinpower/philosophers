@@ -32,6 +32,16 @@ _Bool	is_bad_input(char **av)
 	return (0);
 }
 
+_Bool	init_input(void)
+{
+	if (!(g_philo->pid = malloc(sizeof(pid_t) * (g_philo->n_philos))))
+	{
+		free(g_philo);
+		return (1);
+	}
+	return (0);
+}
+
 _Bool	parse_args(int ac, char **av)
 {
 	if (!(g_philo = malloc(sizeof(t_philo))))
@@ -43,7 +53,6 @@ _Bool	parse_args(int ac, char **av)
 	if (ac == 6)
 	{
 		g_philo->desired_meals = ft_atoi(av[5]);
-		g_full_philos = g_philo->desired_meals;
 	}
 	else
 		g_philo->desired_meals = 0;
@@ -51,11 +60,6 @@ _Bool	parse_args(int ac, char **av)
 		g_philo->time_to_eat <= 0 || g_philo->time_to_sleep <= 0 || \
 		(ac == 6 && g_philo->desired_meals < 1))
 		return (1);
-	if (!(g_philo_threads = malloc(sizeof(pthread_t) * g_philo->n_philos)))
-	{
-		free(g_philo);
-		return (1);
-	}
 	return (0);
 }
 
@@ -66,7 +70,7 @@ _Bool	parse(int ac, char **av)
 		ft_putstr_fd("error arguments count or bad content", 2);
 		return (1);
 	}
-	if (parse_args(ac, av) || init_input(*input))
+	if (parse_args(ac, av) || init_input())
 	{
 		ft_putstr_fd("out of memory", 2);
 		return (1);

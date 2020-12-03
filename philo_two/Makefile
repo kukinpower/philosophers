@@ -18,10 +18,13 @@ OBJ = $(SRC:.c=.o)
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
+%.o : %.c
+	gcc $(FLAGS) -c $< -o $@
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
 
 clean:
 	/bin/rm -f $(OBJ)

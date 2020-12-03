@@ -32,11 +32,11 @@ void		sleep_philo(size_t sleeping_time, t_philo *philo)
 	count_time(sleeping_time, philo->time_to_sleep);
 }
 
-void		*eat_sleep_repeat(void *val)
+void		*eat_sleep_repeat(void)
 {
 	t_philo *philo;
 
-	philo = (t_philo *)val;
+	philo = g_philo;
 	while (1)
 	{
 		sem_wait(g_forks);
@@ -47,11 +47,7 @@ void		*eat_sleep_repeat(void *val)
 		sem_post(g_forks);
 		sem_post(g_forks);
 		if (philo->desired_meals && philo->current_meal == philo->desired_meals)
-		{
-			g_full_philos++;
-			philo->is_hungry = 0;
-			break ;
-		}
+			exit(FULL);
 		sleep_philo(get_time(), philo);
 		print_message(get_time() - g_start_time, philo->num, THINK);
 	}

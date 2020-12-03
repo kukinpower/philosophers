@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:20 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 19:21:21 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:05:38 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ _Bool		init_input(t_input input)
 {
 	if (!(g_philos = malloc(sizeof(t_philo) * input.n_philos)))
 		return (1);
-	if (!(g_forks = malloc(sizeof(pthread_mutex_t) * input.n_philos)))
+	if (!(g_forks = malloc(sizeof(pthread_mutex_t) * input.n_philos + 1)))
 	{
 		free(g_philos);
 		return (1);
@@ -62,6 +62,7 @@ void		init_philo(t_input input)
 		g_philos[i].is_hungry = 1;
 		g_philos[i].left_fork = &g_forks[assign_left_fork(i, input.n_philos)];
 		g_philos[i].right_fork = &g_forks[assign_right_fork(i)];
+		g_philos[i].message_mutex = &g_forks[input.n_philos];
 		i++;
 	}
 }
@@ -71,7 +72,7 @@ void		init_forks(int number_of_forks)
 	int	i;
 
 	i = 0;
-	while (i < number_of_forks)
+	while (i < number_of_forks + 1)
 	{
 		pthread_mutex_init(&g_forks[i], NULL);
 		i++;

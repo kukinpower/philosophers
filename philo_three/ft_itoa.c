@@ -46,8 +46,6 @@ char			*ft_itoa(size_t num)
 	s[nlen] = '\0';
 	if (num == 0)
 		s[0] = '0';
-	if (num < 0)
-		return (NULL);
 	nlen--;
 	while (nlen >= 0 && num != 0)
 	{

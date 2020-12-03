@@ -63,5 +63,6 @@ void			print_message(size_t time, int philo, int action)
 	msg = create_message(time, philo, action);
 	ft_putstr_fd(msg, 1);
 	free(msg);
-	sem_post(g_message_sem);
+	if (action != DEATH)
+		sem_post(g_message_sem);
 }

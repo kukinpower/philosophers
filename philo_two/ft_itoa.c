@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkristie <kukinpower@ya.ru>                +#+  +:+       +#+        */
+/*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/10 20:22:52 by mkristie          #+#    #+#             */
-/*   Updated: 2020/06/28 05:37:32 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:27:05 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ char			*ft_itoa(size_t num)
 	s[nlen] = '\0';
 	if (num == 0)
 		s[0] = '0';
-	if (num < 0)
-		return (NULL);
 	nlen--;
 	while (nlen >= 0 && num != 0)
 	{

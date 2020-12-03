@@ -17,12 +17,15 @@ SRC = eat_sleep_repeat.c \
 
 OBJ = $(SRC:.c=.o)
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
+
+%.o : %.c
+	gcc $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
 
 clean:
 	/bin/rm -f $(OBJ)

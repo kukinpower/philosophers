@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:14 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 19:21:15 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:22:42 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ _Bool			monitor(t_input input)
 			if (g_philos[i].is_hungry && \
 			get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
 			{
-				print_message(get_time() - g_start_time, i, DEATH);
+				print_message(get_time() - g_start_time, i, DEATH, \
+										g_philos[i].message_mutex);
 				return (1);
 			}
 			if (g_full_philos && g_full_philos == input.n_philos)
@@ -58,7 +59,6 @@ _Bool			free_all_mem(int size)
 	{
 		if (pthread_detach(g_philo_threads[i]))
 		{
-			ft_putstr_fd("error: pthread_detach\n", 2);
 			g_error = FATAL_ERR;
 			break ;
 		}
@@ -91,13 +91,8 @@ int				main(int ac, char **av)
 	while (i < input.n_philos)
 	{
 		g_philos[i].last_meal_time = g_start_time;
-		if (pthread_create(&g_philo_threads[i], NULL, \
-							eat_sleep_repeat, (void *)(&g_philos[i])))
-		{
-			ft_putstr_fd("error: pthread_create\n", 2);
-			free_all_mem(i + 1);
-			return (1);
-		}
+		pthread_create(&g_philo_threads[i], NULL, \
+							eat_sleep_repeat, (void *)(&g_philos[i]));
 		i++;
 	}
 	if (monitor(input))

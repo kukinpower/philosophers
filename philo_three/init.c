@@ -17,8 +17,8 @@ _Bool		init_semaphors(int size)
 	sem_unlink("/g_forks");
 	if ((g_forks = sem_open("/g_forks", O_CREAT, S_IRWXU, size)) == SEM_FAILED)
 		return (1);
-	sem_unlink("/g_semathor");
-	if ((g_forks = sem_open("/g_semathor", O_CREAT, S_IRWXU, 1)) == SEM_FAILED)
+	sem_unlink("/g_message_sem");
+	if ((g_message_sem = sem_open("/g_message_sem", O_CREAT, S_IRWXU, 1)) == SEM_FAILED)
 		return (1);
 	return (0);
 }

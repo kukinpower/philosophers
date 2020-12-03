@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:11:48 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 00:58:05 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/03 21:09:30 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,13 @@ char			*create_message(size_t time, int philo, int action)
 	return (message);
 }
 
-void			print_message(size_t time, int philo, int action)
+void			print_message(size_t time, int philo, int action, pthread_mutex_t *message_mutex)
 {
 	char		*msg;
 
 	msg = create_message(time, philo, action);
+	pthread_mutex_lock(message_mutex);
 	ft_putstr_fd(msg, 1);
+	pthread_mutex_unlock(message_mutex);
 	free(msg);
 }
