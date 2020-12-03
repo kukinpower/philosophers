@@ -26,7 +26,8 @@ enum {
 	TAKEN_A_FORK,
 	DEATH,
 	RIGHT,
-	LEFT
+	LEFT,
+	FATAL_ERR
 };
 
 typedef struct			s_input {
@@ -55,6 +56,7 @@ extern	pthread_mutex_t	*g_forks;
 extern	pthread_t		*g_philo_threads;
 extern	size_t			g_start_time;
 extern	int				g_full_philos;
+extern	int				g_error;
 
 size_t					ft_strlen(const char *s);
 void					ft_putstr_fd(char *s, int fd);
@@ -64,7 +66,6 @@ int						ft_isdigit(int c);
 char					*ft_strdup(const char *s1);
 size_t					ft_strlcat(char *dst, const char *src, size_t dstsize);
 void					ft_alloc_check(void *ptr);
-void					error_fatal(void);
 void					init_forks(int number_of_forks);
 void					init_philo(t_input input);
 _Bool					init_input(t_input input);
@@ -75,5 +76,6 @@ char					*create_message(size_t time, int philo, int action);
 void					print_message(size_t time, int philo, int action);
 void					get_forks(t_philo *philo);
 void					*eat_sleep_repeat(void *val);
+_Bool					free_all_mem(int size);
 
 #endif

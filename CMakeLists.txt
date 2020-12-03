@@ -19,7 +19,7 @@ file(GLOB
         PHILO_THREE "philo_three/*.c")
 
 add_executable(philo
-#        ${PHILO_ONE}
+        ${PHILO_ONE}
 #        ${PHILO_TWO}
-        ${PHILO_THREE}
+#        ${PHILO_THREE}
         )

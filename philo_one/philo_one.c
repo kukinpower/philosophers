@@ -17,6 +17,7 @@ pthread_mutex_t	*g_forks;
 pthread_t		*g_philo_threads;
 size_t			g_start_time;
 int				g_full_philos;
+int				g_error;
 
 _Bool			monitor(t_input input)
 {
@@ -39,11 +40,16 @@ _Bool			monitor(t_input input)
 			}
 			i++;
 		}
+		if (g_error == FATAL_ERR)
+		{
+			ft_putstr_fd("error: fatal\n", 2);
+			return (1);
+		}
 	}
 	return (0);
 }
 
-void			free_all_mem(int size)
+_Bool			free_all_mem(int size)
 {
 	int			i;
 
@@ -51,12 +57,22 @@ void			free_all_mem(int size)
 	while (i < size)
 	{
 		if (pthread_detach(g_philo_threads[i]))
-			error_fatal();
+		{
+			ft_putstr_fd("error: pthread_detach\n", 2);
+			g_error = FATAL_ERR;
+			break ;
+		}
 		i++;
 	}
-	free(g_philos);
-	free(g_forks);
-	free(g_philo_threads);
+	if (g_philos)
+		free(g_philos);
+	if (g_forks)
+		free(g_forks);
+	if (g_philo_threads)
+		free(g_philo_threads);
+	if (g_error)
+		return (1);
+	return (0);
 }
 
 int				main(int ac, char **av)
@@ -69,6 +85,7 @@ int				main(int ac, char **av)
 	init_philo(input);
 	init_forks(input.n_philos);
 	i = 0;
+	g_error = 0;
 	g_full_philos = 0;
 	g_start_time = get_time();
 	while (i < input.n_philos)
@@ -76,10 +93,15 @@ int				main(int ac, char **av)
 		g_philos[i].last_meal_time = g_start_time;
 		if (pthread_create(&g_philo_threads[i], NULL, \
 							eat_sleep_repeat, (void *)(&g_philos[i])))
-			error_fatal();
+		{
+			ft_putstr_fd("error: pthread_create\n", 2);
+			free_all_mem(i + 1);
+			return (1);
+		}
 		i++;
 	}
 	if (monitor(input))
-		free_all_mem(input.n_philos);
+		if (free_all_mem(input.n_philos))
+			return (1);
 	return (0);
 }

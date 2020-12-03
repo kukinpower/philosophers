@@ -41,8 +41,11 @@ void		*eat_sleep_repeat(void *val)
 	{
 		get_forks(philo);
 		eat(get_time(), philo);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		if ((pthread_mutex_unlock(philo->left_fork)) || (pthread_mutex_unlock(philo->right_fork)))
+		{
+			g_error = FATAL_ERR;
+			break ;
+		}
 		if (philo->desired_meals && philo->current_meal == philo->desired_meals)
 		{
 			g_full_philos++;
