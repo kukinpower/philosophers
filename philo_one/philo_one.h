@@ -74,7 +74,8 @@ _Bool					init_input(t_input input);
 _Bool					parse(int ac, char **av, t_input *input);
 size_t					get_time();
 char					*get_action(int	action);
-void					print_message(size_t time, int philo, int action, pthread_mutex_t *message_mutex);
+void					print_message(size_t time, int philo, int action, \
+											pthread_mutex_t *message_mutex);
 void					get_forks(t_philo *philo);
 void					*eat_sleep_repeat(void *val);
 _Bool					free_all_mem(int size);

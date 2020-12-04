@@ -36,9 +36,7 @@ _Bool			monitor(t_input input)
 				return (1);
 			}
 			if (g_full_philos && g_full_philos == input.n_philos)
-			{
 				return (1);
-			}
 			i++;
 		}
 		if (g_error == FATAL_ERR)

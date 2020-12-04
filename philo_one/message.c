@@ -55,7 +55,8 @@ char			*create_message(size_t time, int philo, int action)
 	return (message);
 }
 
-void			print_message(size_t time, int philo, int action, pthread_mutex_t *message_mutex)
+void			print_message(size_t time, int philo, int action, \
+										pthread_mutex_t *message_mutex)
 {
 	char		*msg;
 
