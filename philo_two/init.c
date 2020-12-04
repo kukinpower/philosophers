@@ -48,7 +48,8 @@ _Bool		init_forks(int size)
 	if ((g_forks = sem_open("/g_forks", O_CREAT, S_IRWXU, size)) == SEM_FAILED)
 		return (1);
 	sem_unlink("/g_message_sem");
-	if ((g_message_sem = sem_open("/g_message_sem", O_CREAT, S_IRWXU, 1)) == SEM_FAILED)
+	if ((g_message_sem = sem_open("/g_message_sem", O_CREAT, S_IRWXU, 1)) \
+																== SEM_FAILED)
 		return (1);
 	return (0);
 }

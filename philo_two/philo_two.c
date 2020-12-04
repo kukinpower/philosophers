@@ -30,7 +30,7 @@ _Bool			monitor(t_input input)
 		while (i < input.n_philos)
 		{
 			if (g_philos[i].is_hungry && \
-				get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
+			get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
 			{
 				print_message(get_time() - g_start_time, i, DEATH);
 				return (1);
