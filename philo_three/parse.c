@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:11 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/02 02:10:53 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/05 00:29:32 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ _Bool	parse_args(int ac, char **av)
 	g_philo->time_to_die = ft_atoi(av[2]);
 	g_philo->time_to_eat = ft_atoi(av[3]);
 	g_philo->time_to_sleep = ft_atoi(av[4]);
+	g_philo->is_hungry = 0;
 	if (ac == 6)
 	{
 		g_philo->desired_meals = ft_atoi(av[5]);

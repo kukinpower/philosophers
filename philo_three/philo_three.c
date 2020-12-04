@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:14 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/03 14:40:55 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/05 00:30:29 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ sem_t			*g_forks;
 sem_t			*g_message_sem;
 size_t			g_start_time;
 
-_Bool			monitor()
+_Bool			monitor(void)
 {
 	int			full;
 	int			status;
@@ -25,7 +25,7 @@ _Bool			monitor()
 	int			i;
 
 	full = 0;
-	i = 0;
+	i = -1;
 	while (1)
 	{
 		waitpid(-1, &status, 0);
@@ -34,17 +34,12 @@ _Bool			monitor()
 			full++;
 		else if (ret == DEATH)
 		{
-			while (i < g_philo->n_philos)
-			{
+			while (++i < g_philo->n_philos)
 				kill(g_philo->pid[i], SIGKILL);
-				i++;
-			}
 			exit(0);
 		}
 		if (full == g_philo->n_philos)
-		{
 			return (0);
-		}
 	}
 	return (0);
 }
@@ -70,7 +65,6 @@ void			*monitor_process(void *val)
 	while (1)
 	{
 		usleep(21);
-//		printf("---------------------------------kek: %zu, time to die: %zu\n", get_time() - philo->last_meal_time, philo->time_to_die);
 		if (get_time() - philo->last_meal_time > philo->time_to_die)
 		{
 			print_message(get_time() - g_start_time, philo->num, DEATH);
@@ -83,14 +77,12 @@ int				main(int ac, char **av)
 {
 	int			i;
 
-	if (parse(ac, av))
+	if (parse(ac, av) || init_semaphors(g_philo->n_philos))
 		return (1);
-	init_semaphors(g_philo->n_philos);
 	i = 0;
 	g_start_time = get_time();
 	while (i < g_philo->n_philos)
 	{
-		g_philo->is_hungry = 0;
 		g_philo->num = i;
 		g_philo->last_meal_time = g_start_time;
 		g_philo->pid[i] = fork();
@@ -98,7 +90,8 @@ int				main(int ac, char **av)
 			error_fatal();
 		else if (g_philo->pid[i] == 0)
 		{
-			pthread_create(&g_philo->thread, NULL, monitor_process, (void *)g_philo);
+			pthread_create(&g_philo->thread, NULL, \
+						monitor_process, (void *)g_philo);
 			eat_sleep_repeat();
 			exit(0);
 		}
