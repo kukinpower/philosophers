@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:25:22 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/03 21:09:54 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 20:53:09 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void		*eat_sleep_repeat(void *val)
 	{
 		get_forks(philo);
 		eat(get_time(), philo);
-		if ((pthread_mutex_unlock(philo->left_fork)) || \
-			(pthread_mutex_unlock(philo->right_fork)))
+		if (pthread_mutex_unlock(philo->left_fork) || \
+			pthread_mutex_unlock(philo->right_fork))
 		{
 			g_error = FATAL_ERR;
 			break ;

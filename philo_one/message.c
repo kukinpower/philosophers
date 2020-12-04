@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:11:48 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/03 21:09:30 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 20:54:39 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ void			print_message(size_t time, int philo, int action, pthread_mutex_t *messag
 {
 	char		*msg;
 
-	msg = create_message(time, philo, action);
 	pthread_mutex_lock(message_mutex);
+	msg = create_message(time, philo, action);
 	ft_putstr_fd(msg, 1);
-	pthread_mutex_unlock(message_mutex);
 	free(msg);
+	if (action != DEATH)
+		pthread_mutex_unlock(message_mutex);
 }
