@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:14 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/03 21:26:24 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 23:03:45 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_philo			*g_philos;
 sem_t			*g_forks;
-sem_t			*g_message;
+sem_t			*g_message_sem;
 pthread_t		*g_philo_threads;
 size_t			g_start_time;
 int				g_full_philos;
@@ -30,7 +30,7 @@ _Bool			monitor(t_input input)
 		while (i < input.n_philos)
 		{
 			if (g_philos[i].is_hungry && \
-			get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
+				get_time() - g_philos[i].last_meal_time > g_philos[i].time_to_die)
 			{
 				print_message(get_time() - g_start_time, i, DEATH);
 				return (1);
@@ -66,9 +66,9 @@ _Bool			free_all_mem(int size)
 		free(g_philos);
 	if (g_philo_threads)
 		free(g_philo_threads);
-	if (sem_unlink("/g_forks") == -1 || sem_close(g_forks) == -1)
+	if (sem_unlink("/g_forks") == -1)
 		g_error = FATAL_ERR;
-	if (sem_unlink("/g_message") == -1 || sem_close(g_message) == -1)
+	if (sem_unlink("/g_message_sem") == -1 || sem_close(g_message_sem) == -1)
 		g_error = FATAL_ERR;
 	if (g_error)
 		return (1);
@@ -86,13 +86,14 @@ int				main(int ac, char **av)
 	init_forks(input.n_philos);
 	i = 0;
 	g_full_philos = 0;
-	g_start_time = get_time();
 	while (i < input.n_philos)
 	{
+		g_start_time = get_time();
 		g_philos[i].last_meal_time = g_start_time;
 		pthread_create(&g_philo_threads[i], NULL, \
 							eat_sleep_repeat, (void *)(&g_philos[i]));
 		i++;
+		usleep(10);
 	}
 	if (monitor(input))
 		if (free_all_mem(input.n_philos))

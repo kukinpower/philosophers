@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:21:20 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 19:21:21 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:31:13 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ _Bool		init_forks(int size)
 {
 	sem_unlink("/g_forks");
 	if ((g_forks = sem_open("/g_forks", O_CREAT, S_IRWXU, size)) == SEM_FAILED)
+		return (1);
+	sem_unlink("/g_message_sem");
+	if ((g_message_sem = sem_open("/g_message_sem", O_CREAT, S_IRWXU, 1)) == SEM_FAILED)
 		return (1);
 	return (0);
 }

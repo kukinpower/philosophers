@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 19:27:01 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/03 21:26:05 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:39:20 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/time.h>
 # include <string.h>
 # include <semaphore.h>
+# include <stdio.h>
 
 enum {
 	EAT,
@@ -50,7 +51,7 @@ typedef struct			s_philo {
 
 extern	t_philo			*g_philos;
 extern	sem_t			*g_forks;
-extern	sem_t			*g_message;
+extern	sem_t			*g_message_sem;
 extern	pthread_t		*g_philo_threads;
 extern	size_t			g_start_time;
 extern	int				g_full_philos;

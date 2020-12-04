@@ -6,7 +6,7 @@
 /*   By: mkristie <mkristie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 23:11:48 by mkristie          #+#    #+#             */
-/*   Updated: 2020/12/01 00:58:05 by mkristie         ###   ########.fr       */
+/*   Updated: 2020/12/04 22:33:55 by mkristie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,12 @@ void			print_message(size_t time, int philo, int action)
 {
 	char		*msg;
 
+	sem_wait(g_message_sem);
 	msg = create_message(time, philo, action);
 	ft_putstr_fd(msg, 1);
 	free(msg);
+	if (action != DEATH)
+		sem_post(g_message_sem);
+	else
+		return ;
 }
